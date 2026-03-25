@@ -1,0 +1,316 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body, html {
+  height: 100%;
+  font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: radial-gradient(circle at center, #0B214C, #051024 80%);
+  color: #E2E8F0;
+  overflow: hidden; /* Prevents scrolling from bubbles */
+}
+
+/* Base App Layout */
+.app-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+}
+
+/* Bubbles Animation */
+.bubbles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.bubble {
+  position: absolute;
+  bottom: -150px;
+  background-color: rgba(255, 255, 255, 0.05); /* very soft bubbles */
+  backdrop-filter: blur(2px);
+  border-radius: 50%;
+  animation: floatUp 15s infinite ease-in;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.bubble-1 { width: 40px; height: 40px; left: 10%; animation-duration: 8s; animation-delay: 2s; }
+.bubble-2 { width: 80px; height: 80px; left: 20%; animation-duration: 10s; animation-delay: 0s; }
+.bubble-3 { width: 30px; height: 30px; left: 35%; animation-duration: 15s; animation-delay: 4s; }
+.bubble-4 { width: 60px; height: 60px; left: 50%; animation-duration: 11s; animation-delay: 1s; }
+.bubble-5 { width: 50px; height: 50px; left: 65%; animation-duration: 9s; animation-delay: 5s; }
+.bubble-6 { width: 70px; height: 70px; left: 80%; animation-duration: 12s; animation-delay: 3s; }
+.bubble-7 { width: 45px; height: 45px; left: 90%; animation-duration: 14s; animation-delay: 6s; }
+.bubble-8 { width: 25px; height: 25px; left: 15%; animation-duration: 7s; animation-delay: 1s; }
+.bubble-9 { width: 90px; height: 90px; left: 55%; animation-duration: 18s; animation-delay: 0s; }
+.bubble-10 { width: 35px; height: 35px; left: 75%; animation-duration: 11s; animation-delay: 8s; }
+.bubble-11 { width: 55px; height: 55px; left: 25%; animation-duration: 9s; animation-delay: 4s; }
+.bubble-12 { width: 30px; height: 30px; left: 45%; animation-duration: 16s; animation-delay: 2s; }
+.bubble-13 { width: 40px; height: 40px; left: 85%; animation-duration: 10s; animation-delay: 5s; }
+.bubble-14 { width: 65px; height: 65px; left: 5%; animation-duration: 13s; animation-delay: 7s; }
+.bubble-15 { width: 20px; height: 20px; left: 95%; animation-duration: 8s; animation-delay: 3s; }
+/* Others fall back */
+.bubble:nth-child(n+16) { width: 50px; height: 50px; left: 40%; animation-duration: 12s; }
+
+@keyframes floatUp {
+  0% { transform: translateY(0) scale(1); opacity: 0; }
+  10% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translateY(-120vh) scale(1.5); opacity: 0; }
+}
+
+/* Chat UI Glassmorphism Base */
+.chat-wrapper {
+  z-index: 10;
+  background: rgba(13, 27, 62, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  width: 90vw;
+  max-width: 600px;
+  height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+}
+
+.chat-header {
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.chat-header h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  /* Text gradient for cool look */
+  background: linear-gradient(90deg, #A7C5EB, #FFFFFF);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 5px;
+}
+
+.chat-header p {
+  font-size: 0.9rem;
+  color: #8BA4CA;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  scroll-behavior: smooth;
+}
+
+.chat-messages::-webkit-scrollbar {
+  width: 6px;
+}
+.chat-messages::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+
+.welcome-message {
+  margin: auto;
+  text-align: center;
+  color: #8ba4ca99;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.message-container {
+  display: flex;
+  width: 100%;
+}
+
+.message-container.user {
+  justify-content: flex-end;
+}
+
+.message-container.assistant {
+  justify-content: flex-start;
+}
+
+.message-bubble {
+  max-width: 80%;
+  padding: 12px 18px;
+  border-radius: 20px;
+  font-size: 1rem;
+  line-height: 1.5;
+  word-wrap: break-word;
+  white-space: pre-wrap; /* Preserve line breaks from LLM */
+}
+
+/* User Message Bubble */
+.message-bubble.user {
+  background: linear-gradient(135deg, #2563EB, #1E3A8A);
+  color: #ffffff;
+  border-bottom-right-radius: 4px;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+}
+
+/* Assistant Message Bubble */
+.message-bubble.assistant {
+  background: rgba(255, 255, 255, 0.08);
+  color: #E2E8F0;
+  border-bottom-left-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Loading Dots Animation */
+.message-bubble.loading {
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+}
+
+.dot-typing {
+  position: relative;
+  left: -9999px;
+  width: 6px;
+  height: 6px;
+  border-radius: 5px;
+  background-color: #A7C5EB;
+  color: #A7C5EB;
+  box-shadow: 9984px 0 0 0 #A7C5EB, 9999px 0 0 0 #A7C5EB, 10014px 0 0 0 #A7C5EB;
+  animation: dotTyping 1.5s infinite linear;
+}
+
+@keyframes dotTyping {
+  0% { box-shadow: 9984px 0 0 0 #A7C5EB, 9999px 0 0 0 #A7C5EB, 10014px 0 0 0 #A7C5EB; }
+  16.667% { box-shadow: 9984px -6px 0 0 #A7C5EB, 9999px 0 0 0 #A7C5EB, 10014px 0 0 0 #A7C5EB; }
+  33.333% { box-shadow: 9984px 0 0 0 #A7C5EB, 9999px 0 0 0 #A7C5EB, 10014px 0 0 0 #A7C5EB; }
+  50% { box-shadow: 9984px 0 0 0 #A7C5EB, 9999px -6px 0 0 #A7C5EB, 10014px 0 0 0 #A7C5EB; }
+  66.667% { box-shadow: 9984px 0 0 0 #A7C5EB, 9999px 0 0 0 #A7C5EB, 10014px 0 0 0 #A7C5EB; }
+  83.333% { box-shadow: 9984px 0 0 0 #A7C5EB, 9999px 0 0 0 #A7C5EB, 10014px -6px 0 0 #A7C5EB; }
+  100% { box-shadow: 9984px 0 0 0 #A7C5EB, 9999px 0 0 0 #A7C5EB, 10014px 0 0 0 #A7C5EB; }
+}
+
+/* Chat Input Form */
+.chat-input-form {
+  padding: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  gap: 12px;
+  background: rgba(5, 16, 36, 0.3);
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.chat-input-form input {
+  flex: 1;
+  padding: 14px 20px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  outline: none;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.chat-input-form input:focus {
+  border-color: #3B82F6;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.chat-input-form input::placeholder {
+  color: #64748B;
+}
+
+.chat-input-form button {
+  padding: 0 24px;
+  border-radius: 24px;
+  background: #2563EB;
+  border: none;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.chat-input-form button:hover:not(:disabled) {
+  background: #1D4ED8;
+  transform: translateY(-1px);
+}
+
+.chat-input-form button:disabled {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.3);
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Markdown Rendering Styles */
+.message-bubble pre {
+  background: rgba(0, 0, 0, 0.25);
+  padding: 12px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 10px 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.message-bubble pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.message-bubble code {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.message-bubble p {
+  margin-bottom: 10px;
+}
+
+.message-bubble p:last-child {
+  margin-bottom: 0;
+}
+
+.message-bubble ul, .message-bubble ol {
+  margin-left: 20px;
+  margin-bottom: 10px;
+  margin-top: 5px;
+}
+
+.message-bubble li {
+  margin-bottom: 4px;
+}
+
+.message-bubble table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.message-bubble th, .message-bubble td {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 8px;
+  text-align: left;
+}
+
+.message-bubble th {
+  background: rgba(255, 255, 255, 0.1);
+}
