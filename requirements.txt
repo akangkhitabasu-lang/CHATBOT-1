@@ -1,6 +1,6 @@
 langchain
 langchain_community
-ollama
+langchain_groq
 python-dotenv
 fastapi
 uvicorn

@@ -41,7 +41,7 @@ function App() {
       setMessages((prev) => [...prev, { role: 'assistant', content: data.answer }]);
     } catch (error) {
       console.error('Error fetching chat response:', error);
-      setMessages((prev) => [...prev, { role: 'assistant', content: 'Sorry, I encountered an error connecting to the server. Please ensure the FastAPI backend is running on port 8000 and Ollama is active.' }]);
+      setMessages((prev) => [...prev, { role: 'assistant', content: 'Sorry, I encountered an error connecting to the server. Please ensure the FastAPI backend is running on port 8000.' }]);
     } finally {
       setIsLoading(false);
     }
@@ -59,7 +59,7 @@ function App() {
       <div className="chat-wrapper">
         <header className="chat-header">
           <h1>Deep QnA Chatbot</h1>
-          <p>Powered by Llama 3 & FastAPI</p>
+          <p>Powered by Groq (Llama 3) & FastAPI</p>
         </header>
 
         <div className="chat-messages">

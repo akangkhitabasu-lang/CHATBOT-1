@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_community.llms import Ollama
+from langchain_groq import ChatGroq
 from langchain_core.output_parsers import StrOutputParser
 
 load_dotenv()
@@ -13,7 +13,7 @@ load_dotenv()
 # Langchain tracking
 os.environ["LANGCHAIN_API_KEY"] = os.getenv("LANGCHAIN_API_KEY", "")
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_PROJECT"] = "simple QnA chatbot with OLLAMA"
+os.environ["LANGCHAIN_PROJECT"] = "simple QnA chatbot with GROQ"
 
 app = FastAPI(title="QnA Chatbot API")
 
@@ -41,8 +41,8 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     answer: str
 
-def generate_response(question, engine="llama3", temperature=0.7):
-    llm = Ollama(model=engine, temperature=temperature)
+def generate_response(question, engine="llama3-8b-8192", temperature=0.7):
+    llm = ChatGroq(model=engine, temperature=temperature)
     output_parser = StrOutputParser()
     chain = prompt | llm | output_parser
     answer = chain.invoke({'question': question})
@@ -51,7 +51,7 @@ def generate_response(question, engine="llama3", temperature=0.7):
 @app.post("/chat", response_model=ChatResponse)
 async def chat_endpoint(request: ChatRequest):
     try:
-        response = generate_response(request.question, engine="llama3", temperature=request.temperature)
+        response = generate_response(request.question, engine="llama3-8b-8192", temperature=request.temperature)
         return ChatResponse(answer=response)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
