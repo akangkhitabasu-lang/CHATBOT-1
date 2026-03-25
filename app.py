@@ -41,7 +41,7 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     answer: str
 
-def generate_response(question, engine="llama3-8b-8192", temperature=0.7):
+def generate_response(question, engine="llama-3.1-8b-instant", temperature=0.7):
     llm = ChatGroq(model=engine, temperature=temperature)
     output_parser = StrOutputParser()
     chain = prompt | llm | output_parser
@@ -51,7 +51,7 @@ def generate_response(question, engine="llama3-8b-8192", temperature=0.7):
 @app.post("/chat", response_model=ChatResponse)
 async def chat_endpoint(request: ChatRequest):
     try:
-        response = generate_response(request.question, engine="llama3-8b-8192", temperature=request.temperature)
+        response = generate_response(request.question, engine="llama-3.1-8b-instant", temperature=request.temperature)
         return ChatResponse(answer=response)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
